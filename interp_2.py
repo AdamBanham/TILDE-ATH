@@ -138,7 +138,7 @@ def evalScript(script,inObj):
                 #print newFunc
                 funCodes[matches.group(2)]=newFunc
             except:
-                print "could not read file "+importfFilename
+                print ("could not read file "+importfFilename)
             charNum=script.find(';',charNum)   
         elif(script.startswith('~ATH(',charNum)):
             closeparenOffset=script[charNum:].index(')')
@@ -170,13 +170,13 @@ def evalScript(script,inObj):
             charNum+=semicolonOffset#+6
         elif(re.match(r'PRINT2 ([^\[\];]*);',script[charNum:])!=None):
             matches=re.match(r'PRINT2 ([^\[\];]*);',script[charNum:])
-            print getObjStr(ATHVars[matches.group(1)])
+            print (getObjStr(ATHVars[matches.group(1)]))
             charNum=script.find(';',charNum)
         elif(script.startswith('INPUT',charNum)):
             semicolonOffset=script[charNum:].index(';')
             varname=script[charNum+6:charNum+semicolonOffset]
             #print 'INPUT varname was "'+varname+'"'
-            ATHVars[varname]=getStrObj(raw_input(':'))
+            ATHVars[varname]=getStrObj(input(':'))
             charNum+=semicolonOffset
         elif(re.match(r'BIFURCATE ([^\[\];]*)\[([^\[\];]*),([^\[\];]*)\];',script[charNum:])!=None):
             #print("binurcate the thing!")
@@ -242,12 +242,12 @@ def evalScript(script,inObj):
                     sentInObject=bifurcate(ATHVars[matches.group(2)],ATHVars[matches.group(3)])
                     ATHVars[matches.group(4)]=evalScript(theFuncCode,sentInObject)
                 else:
-                    print "error: function called '"+funName+"' not recognized"
+                    print ("error: function called '"+funName+"' not recognized")
                 charNum+=len(funName)
             except:
-                print "function not recognized/ a bug in the interpreter"
-                print matches#re.match(r'([A-Z0-9_]+) \[([^\[\];]*),([^\[\];]*)\]([^\[\];]*);',script[charNum:])
-                print "..."
+                print ("function not recognized/ a bug in the interpreter")
+                print (matches)#re.match(r'([A-Z0-9_]+) \[([^\[\];]*),([^\[\];]*)\]([^\[\];]*);',script[charNum:])
+                print ("...")
                 charNum+=1
             #charNum+=1
         elif(re.match(r'([A-Z0-9_]+) ([^\[\];]*)\[([^\[\];]*),([^\[\];]*)\];',script[charNum:])!=None):
@@ -261,12 +261,12 @@ def evalScript(script,inObj):
                     sentInObject=ATHVars[matches.group(2)]#bifurcate(ATHVars[matches.group(2)],ATHVars[matches.group(3)])
                     ATHVars[matches.group(3)],ATHVars[matches.group(4)]=bifurcate(evalScript(theFuncCode,sentInObject))
                 else:
-                    print "error: function called '"+funName+"' not recognized"
+                    print ("error: function called '"+funName+"' not recognized")
                 charNum+=len(funName)
             except:
-                print "function not recognized/ a bug in the interpreter"
-                print matches#re.match(r'([A-Z0-9_]+) \[([^\[\];]*),([^\[\];]*)\]([^\[\];]*);',script[charNum:])
-                print "..."
+                print ("function not recognized/ a bug in the interpreter")
+                print (matches)#re.match(r'([A-Z0-9_]+) \[([^\[\];]*),([^\[\];]*)\]([^\[\];]*);',script[charNum:])
+                print ("...")
                 charNum+=1
         else:
              charNum+=1
@@ -274,11 +274,14 @@ def evalScript(script,inObj):
                  THIS.DIE()
         #print script[charNum]
     return return_obj
-filename=raw_input()
-filelink=open(filename,'r')
-script=filelink.read(-1)
-result_obj=evalScript(script,NULL_obj)
-raw_input("press enter to close")             
+
+#main loop
+if __name__ == "__main__" :
+    filename=input("What is the path to the ~ATH? :")
+    filelink=open(filename,'r')
+    script=filelink.read(-1)
+    result_obj=evalScript(script,NULL_obj)
+    input("press enter to close")             
          
          
         
